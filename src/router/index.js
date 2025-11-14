@@ -6,7 +6,7 @@ import Register from '@/views/Register.vue'
 const router = createRouter({
   history: createWebHashHistory(), // для GitHub Pages
   routes: [
-    { path: '/', redirect: '/Main' },
+    { path: '/', redirect: '/register' },
     { path: '/register', name: 'register', component: Register },
     { path: '/ProblemForm', name: 'ProblemForm', component: ProblemForm },
     { path: '/Main', name: 'Main', component: Main },
