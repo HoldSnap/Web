@@ -1,33 +1,19 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import Main from '../views/Main.vue'
 import ProblemForm from '@/views/ProblemForm.vue'
 import Register from '@/views/Register.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-
+  history: createWebHashHistory(), // для GitHub Pages
   routes: [
-    {
-      path: '/register',
-      name: 'register',
-      component: Register,
-    },
-    {
-      path: '/ProblemForm',
-      name: 'ProblemForm',
-      component: ProblemForm,
-    },
-    {
-      path: '/Main',
-      name: 'Main',
-      component: Main,
-    },
+    { path: '/', redirect: '/Main' },
+    { path: '/register', name: 'register', component: Register },
+    { path: '/ProblemForm', name: 'ProblemForm', component: ProblemForm },
+    { path: '/Main', name: 'Main', component: Main },
   ],
-
-  // >>> ВАЖНО ДОБАВЛЯЕМ ЭТО <<<
   scrollBehavior() {
-    return { top: 0 } // всегда прокручиваем к началу страницы
+    return { top: 0 }
   },
 })
 
-export default router
+export default router // ← ← ← ЭТО ОЧЕНЬ ВАЖНО
