@@ -1,0 +1,108 @@
+/* Обнуление */
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+*,
+*::before,
+*::after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* Убираем фокусы */
+:focus,
+:active {
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a:hover,
+a:visited {
+  text-decoration: none;
+}
+
+/* Теги блочных элементов */
+nav,
+footer,
+header,
+aside {
+  display: block;
+}
+
+/* Базовые стили */
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-size: 14px;
+  line-height: 1;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #000;
+  background: transparent !important; /* ← ЭТО ГЛАВНОЕ */
+}
+
+/* Инпуты */
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+input,
+textarea {
+  font-size: 16px;
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+/* Списки */
+ul li {
+  list-style: none;
+}
+
+/* Картинки */
+img {
+  vertical-align: top;
+}
+
+/* Заголовки */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* Класс для отключения скролла */
+.lock-scroll {
+  overflow: hidden;
+  touch-action: none;
+}
