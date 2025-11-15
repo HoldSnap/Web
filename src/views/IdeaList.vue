@@ -41,7 +41,7 @@
         <section class="filters-card">
           <div class="filters-row">
             <div class="filter-block">
-              <label class="filter-label">Область улучшения</label>
+              <label class="filter-label">Выберите категорию</label>
               <div class="select-wrapper" :class="{ active: areaFilter }">
                 <select v-model="areaFilter">
                   <option value="">Все области</option>

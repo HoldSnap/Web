@@ -1,70 +1,82 @@
 <template>
   <section class="how">
     <h2 class="how-title">Как это работает</h2>
-    <p class="how-sub">От идеи до реализации — простой и понятный путь к изменениям!</p>
+    <p class="how-sub">Современный, понятный и вдохновляющий путь от мысли до результата.</p>
 
     <div class="how-grid">
-      <!-- Шаг 1 -->
-      <div class="how-card" @mousemove="handleMouseMove" @mouseleave="handleMouseLeave">
-        <div class="step-circle">1</div>
+      <div
+        class="how-card"
+        v-for="(step, index) in steps"
+        :key="index"
+        @mousemove="handleMouseMove"
+        @mouseleave="handleMouseLeave"
+      >
+        <div class="step-watermark">{{ step.num }}</div>
 
-        <h3 class="card-title">Напиши идею</h3>
-        <p class="card-text">Поделись своим предложением по улучшению работы компании.</p>
-      </div>
+        <h3 class="card-title">{{ step.title }}</h3>
+        <p class="card-text">{{ step.text }}</p>
 
-      <!-- Шаг 2 -->
-      <div class="how-card" @mousemove="handleMouseMove" @mouseleave="handleMouseLeave">
-        <div class="step-circle">2</div>
-
-        <h3 class="card-title">Мы рассмотрим</h3>
-        <p class="card-text">
-          Команда оценит идею, даст обратную связь и предложит варианты реализации.
-        </p>
-      </div>
-
-      <!-- Шаг 3 -->
-      <div class="how-card" @mousemove="handleMouseMove" @mouseleave="handleMouseLeave">
-        <div class="step-circle">3</div>
-
-        <h3 class="card-title">Идея реализуется</h3>
-        <p class="card-text">Одобренные идеи внедряются в рамках проектов компании.</p>
-      </div>
-
-      <!-- Шаг 4 -->
-      <div class="how-card" @mousemove="handleMouseMove" @mouseleave="handleMouseLeave">
-        <div class="step-circle">4</div>
-
-        <h3 class="card-title">Получи награды</h3>
-        <p class="card-text">Коины, признание и реальные бонусы за вклад в развитие ПЭК.</p>
+        <div class="light-glow"></div>
+        <div class="noise-layer"></div>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+
+const steps = ref([
+  {
+    num: 'I',
+    title: 'Подай идею',
+    text: 'Расскажи своё предложение по улучшению процессов и сервиса.',
+  },
+  {
+    num: 'II',
+    title: 'Мы изучим',
+    text: 'Специалисты рассмотрят предложение и дадут обратную связь.',
+  },
+  {
+    num: 'III',
+    title: 'Реализация',
+    text: 'Одобренные идеи переходят к внедрению внутри компании.',
+  },
+  {
+    num: 'IV',
+    title: 'Получай бонусы',
+    text: 'Участники получают коины, признание и реальные награды.',
+  },
+])
 
 let observer = null
 
-// 3D-наклон карточки при движении мыши
 const handleMouseMove = (event) => {
   const card = event.currentTarget
   const rect = card.getBoundingClientRect()
 
-  const x = event.clientX - rect.left
-  const y = event.clientY - rect.top
-  const midX = rect.width / 2
-  const midY = rect.height / 2
+  const x = (event.clientX - rect.left) / rect.width - 0.5
+  const y = (event.clientY - rect.top) / rect.height - 0.5
 
-  const rotateY = ((x - midX) / midX) * 10 // максимум ~10°
-  const rotateX = -((y - midY) / midY) * 10
+  card.style.transform = `translateY(-8px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg) scale(1.03)`
 
-  card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`
+  const wm = card.querySelector('.step-watermark')
+  wm.style.transform = `translate(${x * 14}px, ${y * 14}px) scale(1.06)`
+
+  const glow = card.querySelector('.light-glow')
+  glow.style.opacity = '0.55'
+  glow.style.transform = `translate(${x * 40}px, ${y * 40}px)`
 }
 
 const handleMouseLeave = (event) => {
   const card = event.currentTarget
+
   card.style.transform = ''
+  const wm = card.querySelector('.step-watermark')
+  wm.style.transform = ''
+  const glow = card.querySelector('.light-glow')
+  glow.style.opacity = '0'
+  glow.style.transform = ''
 }
 
 onMounted(() => {
@@ -79,13 +91,11 @@ onMounted(() => {
         }
       })
     },
-    {
-      threshold: 0.2,
-    },
+    { threshold: 0.2 },
   )
 
-  cards.forEach((card, index) => {
-    card.style.setProperty('--card-delay', `${index * 0.15}s`)
+  cards.forEach((card, i) => {
+    card.style.setProperty('--delay', `${i * 0.18}s`)
     observer.observe(card)
   })
 })
@@ -96,7 +106,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* ======= СЕКЦИЯ ======= */
+/* ==================== ОСНОВА ==================== */
 .how {
   width: 100%;
   max-width: 1400px;
@@ -105,133 +115,141 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 
-/* Заголовок */
 .how-title {
-  font-size: 42px;
+  font-size: 46px;
   font-weight: 800;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 
   background: linear-gradient(90deg, #50518c, #bf2244);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  animation: fadeDown 0.8s ease;
+  animation: fadeTop 0.8s ease;
 }
 
 .how-sub {
-  margin-top: 8px;
   font-size: 20px;
-  opacity: 0.8;
+  opacity: 0.85;
   margin-bottom: 80px;
 
-  animation: fadeDown 1s ease;
+  animation: fadeTop 1s ease;
 }
 
-/* ======= GRID + ЛИНИЯ МЕЖДУ КАРТОЧКАМИ ======= */
+/* ==================== GRID ==================== */
 .how-grid {
-  position: relative;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
+  gap: 38px;
 }
 
-/* Анимированная линия */
-.how-grid::before {
-  content: '';
-  position: absolute;
-  left: 6%;
-  right: 6%;
-  top: 95px; /* примерно по центру кружков */
-  height: 2px;
-  border-radius: 999px;
-
-  background: linear-gradient(90deg, #50518c, #bf2244, #50518c);
-  background-size: 200% 100%;
-  animation: lineFlow 4s linear infinite;
-  opacity: 0.55;
-  z-index: 0;
-}
-
-/* ======= КАРТОЧКА ======= */
+/* ==================== ПРЕМИУМ КАРТОЧКА ==================== */
 .how-card {
   position: relative;
-  z-index: 1;
+  padding: 48px 32px;
+  border-radius: 26px;
 
-  padding: 40px 28px 46px;
-  border-radius: 22px;
-
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
 
   text-align: left;
-  cursor: default;
   min-height: 260px;
+  overflow: hidden;
 
-  /* для scroll-reveal */
-  opacity: 0;
-  transform: translateY(30px) scale(0.97);
+  transform-style: preserve-3d;
   transition:
-    transform 0.6s ease,
-    opacity 0.6s ease,
-    box-shadow 0.3s ease,
-    border-color 0.3s ease;
-  transition-delay: var(--card-delay, 0s);
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    opacity 0.6s ease;
 
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  transform: translateY(40px) scale(0.96);
+  transition-delay: var(--delay);
 }
 
-/* когда вошла в зону видимости */
 .how-card.is-visible {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
 
-/* hover — усиливаем свет и тень, 3D-наклон добавляет JS */
 .how-card:hover {
-  box-shadow: 0 20px 44px rgba(80, 81, 140, 0.35);
-  border-color: rgba(191, 34, 68, 0.35);
-}
-
-/* ======= STEP КРУГ С НОМЕРОМ ======= */
-.step-circle {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 22px;
-  font-weight: 700;
-  color: #ffffff;
-
-  background: radial-gradient(circle at 30% 30%, #ffffff, #bf2244);
   box-shadow:
-    0 0 0 2px rgba(255, 255, 255, 0.7),
-    0 0 18px rgba(191, 34, 68, 0.8);
-
-  margin-bottom: 22px;
-
-  animation: pulseGlow 2.5s ease-in-out infinite;
+    0 24px 54px rgba(80, 81, 140, 0.3),
+    0 12px 26px rgba(0, 0, 0, 0.1);
 }
 
-/* Заголовок и текст */
+/* ==================== ГРАДИЕНТНЫЕ РИМСКИЕ WATERMARK ==================== */
+.step-watermark {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+
+  font-size: 128px;
+  font-weight: 900;
+
+  background: linear-gradient(180deg, #bf2244, #50518c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  opacity: 0.17;
+  pointer-events: none;
+  user-select: none;
+
+  transform: translateY(20px) scale(0.95);
+  transition:
+    transform 0.35s ease,
+    opacity 0.35s ease;
+}
+
+/* Watermark появляется мягко снизу */
+.how-card.is-visible .step-watermark {
+  transform: translateY(0) scale(1);
+  opacity: 0.2;
+}
+
+/* ==================== ПОДСВЕТКА ПРИ ДВИЖЕНИИ ==================== */
+.light-glow {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  top: 40%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.65), transparent 70%);
+  opacity: 0;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+  filter: blur(26px);
+}
+
+/* ==================== ПРЕМИУМ НОЙЗ-ОВЕРЛЕЙ ==================== */
+.noise-layer {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://grainy-gradient.vercel.app/noise.svg');
+  opacity: 0.18;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+}
+
+/* ==================== ТЕКСТ ==================== */
 .card-title {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
 
 .card-text {
   font-size: 17px;
+  opacity: 0.88;
   line-height: 1.55;
-  opacity: 0.85;
 }
 
-/* ======= АНИМАЦИИ ======= */
-@keyframes fadeDown {
+/* ==================== АНИМАЦИИ ==================== */
+@keyframes fadeTop {
   from {
     opacity: 0;
     transform: translateY(-20px);
@@ -242,61 +260,17 @@ onBeforeUnmount(() => {
   }
 }
 
-/* Пульсация свечения вокруг круга */
-@keyframes pulseGlow {
-  0% {
-    box-shadow:
-      0 0 0 2px rgba(255, 255, 255, 0.7),
-      0 0 18px rgba(191, 34, 68, 0.75);
-  }
-  50% {
-    box-shadow:
-      0 0 0 4px rgba(255, 255, 255, 0.9),
-      0 0 26px rgba(80, 81, 140, 0.9);
-  }
-  100% {
-    box-shadow:
-      0 0 0 2px rgba(255, 255, 255, 0.7),
-      0 0 18px rgba(191, 34, 68, 0.75);
-  }
-}
-
-/* Анимация бегущего градиента по линии */
-@keyframes lineFlow {
-  from {
-    background-position: 0% 0;
-  }
-  to {
-    background-position: 200% 0;
-  }
-}
-
-/* ======= АДАПТИВ ======= */
+/* ==================== АДАПТИВ ==================== */
 @media (max-width: 1200px) {
   .how-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .how-grid::before {
-    left: 8%;
-    right: 8%;
-    top: 100px;
   }
 }
 
 @media (max-width: 700px) {
   .how-grid {
     grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
-  .how-grid::before {
-    display: none; /* на мобилке линии между карточками можно убрать */
-  }
-
-  .how {
-    margin: 100px auto;
-    padding: 0 20px;
+    gap: 24px;
   }
 }
 </style>
