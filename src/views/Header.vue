@@ -9,7 +9,7 @@
 
       <!-- МЕНЮ -->
       <nav class="menu fade-right">
-        <a class="menu-item" href="#">Идеи</a>
+        <router-link class="menu-item" to="/idealist">Идеи</router-link>
         <a class="menu-item" href="#">Жалобы</a>
         <a class="menu-item" href="#">Рейтинг</a>
         <a class="menu-item" href="#">Магазин</a>

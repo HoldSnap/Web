@@ -15,7 +15,7 @@
         <h2 class="subtitle">Твоя энергия меняет ПЭК</h2>
 
         <div class="actions">
-          <button class="btn idea">Подать идею</button>
+          <router-link to="/idea" class="btn idea"> Подать идею </router-link>
           <router-link to="/ProblemForm" class="btn complaint"> Подать жалобу </router-link>
         </div>
       </div>
