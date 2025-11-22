@@ -11,8 +11,8 @@
       <nav class="menu fade-right">
         <router-link class="menu-item" to="/idealist">Идеи</router-link>
         <router-link class="menu-item" to="/problemlist">Жалобы</router-link>
-        <a class="menu-item" href="#">Рейтинг</a>
-        <a class="menu-item" href="#">Магазин</a>
+        <router-link class="menu-item" to="/rating">Рейтинг</router-link>
+        <router-link class="menu-item" to="/shop">Магазин</router-link>
       </nav>
     </div>
 
